@@ -36,7 +36,3 @@ def count_inversions(array)
 	# then go through and check how many inversions across two arrays
 end
 
-def file_to_array(file)
-	File.open(file) do |f|
-	end
-end
