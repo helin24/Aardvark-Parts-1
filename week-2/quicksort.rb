@@ -4,10 +4,11 @@ def quicksort(array)
 	end
 	
 	puts "#array starts out as #{array.inspect}"
+	swap(array, 0, -1)
 	pivot = array[0]
 	comparisons = 0
 	comparisons += array.length - 1
-	puts "#{comparisons} comparisons are made"
+	# puts "#{comparisons} comparisons are made"
 	
 	first_greater_than_index = 1
 	(array.length - 1).times do |index|
@@ -26,7 +27,7 @@ def quicksort(array)
 	array[first_greater_than_index..-1] = right[0]
 	comparisons += left[1] + right[1] 
 	
-	puts "array ends as #{array.inspect}"
+	# puts "array ends as #{array.inspect}"
 	[array, comparisons]
 	# base case is when there's only 1 number in array
 	# otherwise each step involves choosing a pivot and comparing every other number in array with pivot
