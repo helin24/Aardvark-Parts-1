@@ -4,6 +4,8 @@ def quicksort(array)
 	end
 	
 	puts "#array starts out as #{array.inspect}"
+
+	# swap(array, 0, choose_median(array))
 	swap(array, 0, -1)
 	pivot = array[0]
 	comparisons = 0
@@ -43,4 +45,11 @@ def swap(array, index1, index2)
 	array[index1] = array[index2]
 	array[index2] = temp
 	array
+end
+
+def choose_median(array)
+	middle = (array.length - 1) / 2
+	pairs = [[0, array[0]], [-1, array[-1]], [middle, array[middle]]]
+	pairs.sort_by!{|pair| pair[1]}
+	pairs[1][0]
 end
