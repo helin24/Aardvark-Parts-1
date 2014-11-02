@@ -1,5 +1,3 @@
-file = File.open('QuickSort.txt')
-
 def quicksort(array)
 	if array.length <= 1
 		return [array, 0]
@@ -21,10 +19,10 @@ def quicksort(array)
 	end
 	puts "index of separation is #{first_greater_than_index}"
 	swap(array, 0, first_greater_than_index - 1)
-	left = quicksort(array[0..(first_greater_than_index - 1)])
+	left = quicksort(array[0...(first_greater_than_index - 1)])
 	right = quicksort(array[first_greater_than_index..-1])
 	
-	array[0..(first_greater_than_index - 1)] = left[0]
+	array[0...(first_greater_than_index - 1)] = left[0]
 	array[first_greater_than_index..-1] = right[0]
 	comparisons += left[1] + right[1] 
 	
