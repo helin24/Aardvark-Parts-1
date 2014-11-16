@@ -20,4 +20,10 @@ public class Scc {
 		}
 		return file;
 	}
+
+	// Go backwards in graph
+		// for each number 1.. end of graph vertices
+			// check for vertices that connect to it 
+			// if vertex has already been found then ignore
+			// if vertex is new then check for vertices that connect
 }
