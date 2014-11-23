@@ -1,4 +1,5 @@
 require_relative 'graph'
+require 'pry'
 
 class DijkstraGraph < Graph
 	def line_to_vertex(line)
@@ -34,11 +35,11 @@ class DijkstraGraph < Graph
 			closest_inside_vertex = min_vertex[1][0]
 			distance_to_outside = min_vertex[1][1]
 			distances_outside_x.delete(outside_vertex)
-			total_distance = distances_within_x[closest_inside_vertex] + distance_to_outside
-			puts "total distance between 1 and next vertex is #{total_distance}"
-			distances_within_x.merge!(outside_vertex => total_distance)
+			puts "total distance between 1 and next vertex is #{distance_to_outside}"
+			distances_within_x.merge!(outside_vertex => distance_to_outside)
 			x.merge!(remaining_vertices.delete(outside_vertex))
 			min_distances(outside_vertex, distances_outside_x,distances_within_x)
+			#binding.pry
 			# choose the closest next point
 			# find distances of all vertices that could be reached from x
 		end
@@ -48,13 +49,21 @@ class DijkstraGraph < Graph
 	def min_distances(new_vertex, distances_outside_x, distances_within_x)
 		@vertices[new_vertex].each_pair do |other_vertex, new_length|
 			# this should provide form {d4 => [d1,length], d5 => [d2, length]}
-			break if distances_within_x.include?(other_vertex)
-			current_closest= distances_outside_x[other_vertex]
-			if current_closest == nil 
-				distances_outside_x[other_vertex] = [new_vertex, new_length]
+			next if distances_within_x.include?(other_vertex)
+			distance_from_origin = distances_within_x[new_vertex]
+			current_closest = distances_outside_x[other_vertex]
+			total_length = distance_from_origin + new_length
+			if current_closest == nil
+				distances_outside_x[other_vertex] = [new_vertex, total_length]
+				puts "other vertex #{other_vertex} was inserted into distances outside x"
 			else 
 				current_length = current_closest[1]
-				distances_outside_x[other_vertex] = [new_vertex, new_length] if current_length > new_length
+				if current_length > total_length 
+					distances_outside_x[other_vertex] = [new_vertex, total_length]
+					puts "other vertex #{other_vertex} is replacing old distance #{current_length} with #{total_length}"
+				else
+					puts "other vertex #{other_vertex} is not replacing old distance #{current_length} with #{total_length}"
+				end
 			end
 		end
 	end
