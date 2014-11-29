@@ -3,7 +3,7 @@ def quicksort(array)
 		return [array, 0]
 	end
 	
-	puts "#array starts out as #{array.inspect}"
+	#puts "#array starts out as #{array.inspect}"
 
 	# swap(array, 0, choose_median(array))
 	swap(array, 0, -1)

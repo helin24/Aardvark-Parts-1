@@ -1,3 +1,4 @@
+require_relative '../week-2/quicksort.rb'
 
 def two_sum(file)
 	all_numbers = hash_file(file)
