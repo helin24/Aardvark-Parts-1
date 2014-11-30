@@ -19,8 +19,13 @@ def median_maintenance(file)
 			else
 				lower_half.insert(new_num)
 			end
+		elsif upper_half.length > 0 && new_num < upper_half.root
+			if lower_half.length == upper_half.length
+				lower_half.insert(new_num)
+			else
+				upper_half.insert(new_num)
+			end
 		else
-# need to have checking whether new num or top of upper half should be median
 			if lower_half.length == upper_half.length
 				removed = upper_half.remove_top
 				lower_half.insert(removed)
@@ -30,8 +35,8 @@ def median_maintenance(file)
 		
 		median = lower_half.root
 		sum_of_medians += median
-	puts "lower half is #{lower_half}"
-	puts "upper half is #{upper_half}"
+#	puts "lower half is #{lower_half}"
+#	puts "upper half is #{upper_half}"
 	
 #		puts "median is #{median}"
 		puts "sum of medians is #{sum_of_medians}"
