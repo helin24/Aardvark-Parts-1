@@ -1,13 +1,8 @@
-import math
-
 def merge_sort(array):
-    # if array length is greater than 2 then split into two halves and call merge_osrt on them
-    if (len(array) == 2):
-        return [min(array), max(array)]
-    elif (len(array) == 1):
+    if (len(array) == 1):
         return array
     
-    split_index = int(math.ceil(len(array) / 2))
+    split_index = len(array) // 2
     left = merge_sort(array[:split_index])
     right = merge_sort(array[split_index:])
 
