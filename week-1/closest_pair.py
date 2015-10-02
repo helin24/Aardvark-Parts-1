@@ -1,16 +1,10 @@
 import math
 
 def closest_pair(alist):
-
-    # closest split pair:
-        # get largest x-coordinate in left side of P
-        # look only in strip that lies within minimum distance from the largest x-coordinate point
-        # scan through Sy
-
     if len(alist) == 2:
         return alist, euclidean_distance(alist[0], alist[1])
-    elif len(alist) == 3:
-        return pick_from_three(alist)
+    elif len(alist) == 1:
+        return None, None
 
     sorted_by_x = merge_sort_points(alist, 0)
     sorted_by_y = merge_sort_points(alist, 1)
@@ -18,26 +12,13 @@ def closest_pair(alist):
     split_index = len(sorted_by_x) // 2
     left, min_dist_left = closest_pair(sorted_by_x[:split_index])
     right, min_dist_right = closest_pair(sorted_by_x[split_index:])
-    split, min_dist_split = closest_split_pair(sorted_by_x, sorted_by_y, min(min_dist_left, min_dist_right))
+ 
+    split, min_dist_split = closest_split_pair(sorted_by_x, sorted_by_y, min(i for i in [min_dist_left, min_dist_right] if i is not None))
 
-    print "left"
-    print left
-    print "right"
-    print right
-    print "split"
-    print split
-
-    if split is not None:
-        abs_min = min(min_dist_left, min_dist_right, min_dist_split)
-    else:
-        abs_min = min(min_dist_left, min_dist_right)
-
-    if min_dist_left == abs_min:
-        return left, min_dist_left
-    elif min_dist_right == abs_min:
-        return right, min_dist_right
-    else:
-        return split, min_dist_split
+    distances = [(min_dist_left, left), (min_dist_right, right), (min_dist_split, split)]
+    not_none_dist = [i for i in distances if i[0] is not None]
+    not_none_dist.sort()
+    return not_none_dist[0][1], not_none_dist[0][0]
 
 def closest_split_pair(sorted_by_x, sorted_by_y, min_dist):
     midpoint = sorted_by_x[int(math.ceil(len(sorted_by_x) / 2))]
@@ -60,20 +41,6 @@ def closest_split_pair(sorted_by_x, sorted_by_y, min_dist):
         return None, None
     else:
         return best_pair, best
-        
-
-def pick_from_three(alist):
-    dist_01 = euclidean_distance(alist[0], alist[1])
-    dist_02 = euclidean_distance(alist[0], alist[2])
-    dist_12 = euclidean_distance(alist[1], alist[2])
-    min_dist = min(dist_01, dist_02, dist_12)
-
-    if dist_01 == min_dist:
-        return [alist[0], alist[1]], dist_01
-    elif dist_02 == min_dist:
-        return [alist[0], alist[2]], dist_02
-    else:
-        return [alist[1], alist[2]], dist_12
 
 def euclidean_distance(point_one, point_two):
     return math.sqrt((point_two[0] - point_one[0])**2 + (point_two[1] - point_one[1])**2)
