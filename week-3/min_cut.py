@@ -1,8 +1,6 @@
 import random
 import copy
-
-def min_cut(graph):
-    return
+import time
 
 class Graph:
     def __init__(self, filename):
@@ -15,42 +13,34 @@ class Graph:
     def min_cut(self, repetitions):
         min_so_far = self.num_edges()
         for i in range(repetitions):
-            single_min = self.single_min_cut()
+            single_min = self.cut()
             print "single min is %s" % (single_min)
             min_so_far = min(min_so_far, single_min)
         return min_so_far
 
-    def single_min_cut(self):
+    def cut(self):
         assoc_arr = copy.deepcopy(self.assoc_arr)
 
         while len(assoc_arr) > 2:
-            current_pair = random.choice(self.all_edges(assoc_arr))
-#            print current_pair
-            merged_edges = assoc_arr[current_pair[0]]
+            node_one, node_two = random.choice(self.all_edges(assoc_arr))
+            # this should be improved because getting a list of all edges is time consuming
+            # could modify to just choosing a random vertex and then a random edge - but then this would lower probability of getting min cut because vertices with fewer edges have equal probability of being merged?
 
-            merged_edges.extend(assoc_arr[current_pair[1]])
-            external_edges = []
-            for edge in merged_edges:
-                if edge != current_pair[0] and edge != current_pair[1]:
-                    external_edges.append(edge)
-            
-            combined_nodes = []
-            combined_nodes.extend(list(current_pair[0]))
-            combined_nodes.extend(list(current_pair[1]))
-            new_node = tuple(combined_nodes)
-            assoc_arr[new_node] = external_edges
+            # this runs faster but not truly random
+            # node_one = random.choice(assoc_arr.keys())
+            # node_two = random.choice(assoc_arr[node_one])
+
+            assoc_arr[node_one].extend(assoc_arr[node_two])
+            assoc_arr[node_one] = [edge for edge in assoc_arr[node_one] if edge != node_one and edge != node_two]
    
-            for edge in set(external_edges):
+            for edge in set(assoc_arr[node_one]):
                 for i in range(0, len(assoc_arr[edge])):
-                    if assoc_arr[edge][i] in [current_pair[0], current_pair[1]]:
-                        assoc_arr[edge][i] = new_node
+                    if assoc_arr[edge][i] == node_two:
+                        assoc_arr[edge][i] = node_one
 
-            assoc_arr.pop(current_pair[0], None)
-            assoc_arr.pop(current_pair[1], None)
+            assoc_arr.pop(node_two, None)
 
-#            print assoc_arr
-
-        return len(assoc_arr[new_node])
+        return len(assoc_arr[node_one])
            
     def num_edges(self):
         total = 0
@@ -62,13 +52,14 @@ class Graph:
         edges = []
         for value in assoc_arr:
             for partner in assoc_arr[value]:
-                edges.append([value, partner])
-#        print "there are currently %s edges" % (len(edges))
+                edges.append((value, partner))
         return list(edges)
 
 
 # answer to problem given in kargerMinCut.txt is 17
 
 graph = Graph('kargerMinCut.txt')
-print graph.min_cut(20)
+start_time = time.time()
+print graph.min_cut(100)
+print "---- %s  ---- " % (time.time() - start_time)
 
