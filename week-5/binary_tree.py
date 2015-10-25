@@ -30,8 +30,7 @@ class BinaryTree:
         return string
 
 
-    def min(self):
-        index = 0
+    def min(self, index=0):
         min_num = None
         
         while index < len(self.rep) and self.rep[index] != None:
@@ -41,8 +40,7 @@ class BinaryTree:
         return min_num
 
 
-    def max(self):
-        index = 0
+    def max(self, index=0):
         max_num = None
 
         while index < len(self.rep) and self.rep[index] != None:
@@ -52,11 +50,72 @@ class BinaryTree:
         return max_num
 
 
+    def find(self, value):
+        index = 0
+        answer = None
+
+        while index < len(self.rep) and self.rep[index] != None:
+            if value == self.rep[index]:
+                answer = index
+                break
+            elif value < self.rep[index]:
+                index = 2 * index + 1
+            else:
+                index = 2 * (index + 1)
+
+        return answer
+
+
+    def left_child(self, index=0):
+        if 2 * index + 1 < len(self.rep) and self.rep[2 * index + 1] != 0:
+            return self.rep[2 * index + 1], 2 * index + 1
+        else:
+            return None, 2 * index + 1
+        
+
+    def right_child(self, index=0):
+        if 2 * (index + 1) < len(self.rep) and self.rep[2 * (index + 1)] != 0:
+            return self.rep[2 * (index + 1)], 2 * (index + 1)
+        else:
+            return None, 2 * (index + 1)
+
+
+    def parent(self, index):
+        parent_index = (index - 1) / 2
+        if parent_index >= 0:
+            return self.rep[parent_index], parent_index
+        else:
+            return None, None
+        
+
     def predecessor(self, sub):
-        pass
+        index = self.find(sub)
+        left_child, left_index = self.left_child(index)
+        if left_child:
+            return self.max(left_index)
+        else:
+            parent, parent_index = self.parent(index)
+            while parent:
+                if parent < sub:
+                    return parent
+                else:
+                    parent, parent_index = self.parent(parent_index)
+        return None
 
     def successor(self, sub):
-        pass
+        index = self.find(sub)
+        right_child, right_index = self.right_child(index)
+        if right_child:
+            return self.max(right_index)
+        else:
+            parent, parent_index = self.parent(index)
+            while parent:
+                if parent > sub:
+                    return parent
+                else:
+                    parent, parent_index = self.parent(parent_index)
+        return None
+
 
     def insert(self, number):
         index = 0
@@ -65,7 +124,7 @@ class BinaryTree:
             self.rep.append(number)
             return index
         
-        while index < len(self.rep) and self.rep[index]:
+        while index < len(self.rep) and self.rep[index] != None:
             if self.rep[index] >= number:
                 index = 2 * index + 1
             else:
@@ -102,3 +161,8 @@ print t.min()
 t.insert(0)
 print t.min()
 print t.max()
+print t.find(8)
+t.insert(1)
+print t
+print t.successor(0)
+
