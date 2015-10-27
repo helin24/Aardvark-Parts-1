@@ -11,6 +11,8 @@ class Heap:
         pointer = 1
         size = len(self.heap)
         string = ""
+        if size == 0:
+            return string
         levels = math.ceil(math.log(size, 2)) # max index of level
         max_width = (2**(levels) + 1) * 5
         
@@ -27,6 +29,10 @@ class Heap:
             string += "\n\n"
 
         return string
+
+    
+    def __len__(self):
+        return len(self.heap)
     
 
     def insert(self, number):
@@ -46,11 +52,18 @@ class Heap:
         return self
 
 
+    def get_min_without_removing(self):
+        return self.heap[0]
+
+
     def get_min(self):
         removed = self.heap[0]
 
         sub = self.heap.pop()
         index = 0
+
+        if len(self.heap) == 1:
+            self.heap[index] = sub
 
         while len(self.heap) > index * 2 + 1:
             left = self.heap[index * 2 + 1]
@@ -67,7 +80,7 @@ class Heap:
                         index = (index + 1) * 2
                         self.heap[index] = sub
             else:
-                if sub > left:
+                if sub >= left:
                     self.heap[index] = left
                     self.heap[index * 2 + 1] = sub
                     break
@@ -77,9 +90,16 @@ class Heap:
 
 
 
-h = Heap([1,5,8,2, 3, 1, 4])
+h = Heap([3])
+h.insert(2)
 print h
-h.insert(0)
+h.get_min()
 print h
-print h.get_min()
-print h
+
+
+# h = Heap([1,5,8,2, 3, 1, 4])
+# print h
+# h.insert(0)
+# print h
+# print h.get_min()
+# print h
