@@ -89,14 +89,6 @@ class Heap:
         return removed
 
 
-
-h = Heap([3])
-h.insert(2)
-print h
-h.get_min()
-print h
-
-
 # h = Heap([1,5,8,2, 3, 1, 4])
 # print h
 # h.insert(0)
